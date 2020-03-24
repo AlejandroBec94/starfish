@@ -17,7 +17,7 @@ create table addresses
 		primary key (id)
 );
 
-alter table consumers
-	add constraint fk_consumer_id
-		foreign key (id) references addresses (id)
+alter table addresses
+	add constraint addresses_consumers_i_fk
+		foreign key (consumer_id) references consumers (id)
 			on update cascade on delete cascade;

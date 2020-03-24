@@ -2,12 +2,16 @@
 
 namespace starFish\db\database;
 
+include('config.php');
+
 use starFish\db\config;
 use \PDO;
 
 
-class database
+class Database
 {
+
+    private static $_instance = null;
 
     private $host;
     private $port;
@@ -15,7 +19,7 @@ class database
     private $user;
     private $password;
 
-    protected function __construct()
+    private function __construct()
     {
         $this->host = config\DB_HOST;
         $this->port = config\DB_PORT;
@@ -27,7 +31,7 @@ class database
     public static function getInstance()
     {
         if (!self::$_instance) {
-            self::$_instance = new self();
+            self::$_instance = new Database();
         }
         return self::$_instance;
     }
@@ -35,9 +39,11 @@ class database
     public function connect()
     {
         try {
-            return new \PDO('mysql: host=' . $this->host . ';dbname=' . $this->database . ';port=' . $this->port, $this->user, $this->password);
+            $conn = new PDO('mysql:host=' . $this->host . ';dbname=' . $this->database . ';port=' . $this->port, $this->user, $this->password);
+            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            return $conn;
         } catch (\Exception $e) {
-            return $e;
+            return "error: " . $e;
         }
     }
 
