@@ -8,8 +8,10 @@
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <?php
     include('models/consumer.php');
+    include('models/address.php');
 
     use starFish\model\consumer;
+    use starFish\model\address;
 
     ?>
 </head>
@@ -49,6 +51,7 @@
                 <th scope="col">First</th>
                 <th scope="col">Last</th>
                 <th scope="col">Age</th>
+                <th scope="col">Last Address</th>
                 <th scope="col"></th>
             </tr>
             </thead>
@@ -66,8 +69,13 @@
                     <td> <?php echo $consumer->firstName; ?></td>
                     <td> <?php echo $consumer->lastName; ?></td>
                     <td> <?php echo $consumer->age; ?></td>
+                    <td> <?php
+                        $address = address\Address::findWithConsumerId($consumer->id);
+                        echo $address[0]->address;
+                        ?></td>
                     <td><i class="fas fa-trash" style="color:red; cursor: pointer"
                            onclick="deleteConsumer(<?php echo $consumer->id; ?>)"></i></td>
+
 
                 </tr>
             <?php } ?>
@@ -91,24 +99,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-<script>
-
-    function deleteConsumer(customerId) {
-
-        $.ajax({
-            url: 'controllers/consumer/delete.php',
-
-            data: {id: customerId},
-
-            type: 'POST',
-
-            dataType: 'json',
-        });
-        $("#" + customerId).remove();
-
-
-    }
-
+<script src="js/delete.js">
 </script>
 </body>
 </html>
